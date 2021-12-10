@@ -1,0 +1,160 @@
+from tkinter import *
+from math import *
+from PIL import ImageTk, Image
+
+root = Tk()
+root.title("Kalkulator")
+root.iconbitmap('c:/python_images/kalkulator.ico')
+
+
+
+background_image = ("c:/python_images/kalkulator/kalkulator.png")
+background = ImageTk.PhotoImage(Image.open(background_image))
+my_label = Label(image=background)
+my_label.grid(row=0, column=0, rowspan=6, columnspan=4)
+
+
+
+e = Entry(root, width=35, borderwidth=5)
+e.grid( row=0, column=0, columnspan=4, padx=10, pady=10)
+
+
+
+def button_click(number):
+    #e.delete(0, END)
+    current = e.get()
+    e.delete(0, END)
+    e.insert(0, str(current) + str(number))
+
+def button_przecinek():
+    current = e.get()
+    e.delete(0, END)
+    e.insert(0, str(current) + ("."))
+
+def button_clear():
+    e.delete(0, END)
+    current = str(0)
+
+def button_add():
+    global sym
+    sym = 1
+
+    first_number = e.get()
+    global f_num
+    f_num = float(first_number)
+    e.delete(0, END)
+
+def button_minus():
+    global sym
+    sym = 3
+
+    first_number = e.get()
+    global f_num
+    f_num = float(first_number)
+    e.delete(0, END)
+
+def button_mnozenie():
+    global sym
+    sym = 5
+
+    first_number = e.get()
+    global f_num
+    f_num = float(first_number)
+    e.delete(0, END)
+
+def button_dzielenie():
+    global sym
+    sym = 7
+
+    first_number = e.get()
+    global f_num
+    f_num = float(first_number)
+    e.delete(0, END)
+
+def button_rownasie():
+    second_number = e.get()
+    s_num = float(second_number)
+    e.delete(0, END)
+    if (sym < 2):
+        e.insert(0, f_num + s_num)
+    if (4 > sym > 2):
+        e.insert(0, f_num + (0 - s_num))
+    if (6 > sym > 4):
+        e.insert(0, f_num * s_num)
+    if (8 > sym > 6):
+        e.insert(0, f_num / s_num)
+
+
+# Buttons images
+image_color1 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color1.png"))
+image_color2 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color2.png"))
+image_color3 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color3.png"))
+image_color4 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color4.png"))
+image_color5 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color5.png"))
+image_color6 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color6.png"))
+image_color7 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color7.png"))
+image_color8 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color8.png"))
+image_color9 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color9.png"))
+image_color0 = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_color0.png"))
+
+image_color_plus = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_plus.png"))
+image_color_minus = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_minus.png"))
+image_color_dzielenie = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_dzielenie.png"))
+image_color_mnozenie = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_mnozenie.png"))
+
+image_color_clear = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_clear.png"))
+image_color_przecinek = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_przecinek.png"))
+image_color_rownasie = ImageTk.PhotoImage(Image.open("c:/python_images/kalkulator/image_rownasie.png"))
+
+
+
+# Define buttons
+
+button1 = Button(root,  padx=40, pady=20, image=image_color1, borderwidth=0, command=lambda: button_click(1))
+button2 = Button(root, text="2", padx=40, pady=20, image=image_color2, borderwidth=0, command=lambda: button_click(2))
+button3 = Button(root, text="3", padx=40, pady=20, image=image_color3, borderwidth=0, command=lambda: button_click(3))
+button4 = Button(root, text="4", padx=40, pady=20, image=image_color4, borderwidth=0, command=lambda: button_click(4))
+button5 = Button(root, text="5", padx=40, pady=20, image=image_color5, borderwidth=0, command=lambda: button_click(5))
+button6 = Button(root, text="6", padx=40, pady=20, image=image_color6, borderwidth=0, command=lambda: button_click(6))
+button7 = Button(root, text="7", padx=40, pady=20, image=image_color7, borderwidth=0, command=lambda: button_click(7))
+button8 = Button(root, text="8", padx=40, pady=20, image=image_color8, borderwidth=0, command=lambda: button_click(8))
+button9 = Button(root, text="9", padx=40, pady=20, image=image_color9, borderwidth=0, command=lambda: button_click(9))
+button0 = Button(root, text="0", padx=40, pady=20, image=image_color0, borderwidth=0, command=lambda: button_click(0))
+
+button_plus = Button(root, text="+", padx=40, pady=20, image=image_color_plus, borderwidth=0, command=button_add)
+button_minus = Button(root, text="-", padx=40, pady=20, image=image_color_minus, borderwidth=0, command=button_minus)
+button_dzielenie = Button(root, text="/", padx=40, pady=20, image=image_color_dzielenie, borderwidth=0, command=button_dzielenie)
+button_mnozenie = Button(root, text="x", padx=39, pady=20, image=image_color_mnozenie, borderwidth=0, command=button_mnozenie)
+
+button_clear = Button(root, text="Cl", padx=38, pady=20, image=image_color_clear, borderwidth=0, command=button_clear)
+button_przecinek = Button(root, text=",", padx=41, pady=20, image=image_color_przecinek, borderwidth=0, command=button_przecinek)
+button_rownasie = Button(root, text="=", padx=95, pady=20, image=image_color_rownasie, borderwidth=0, command=button_rownasie)
+
+# Put the buttons on the screen
+
+button1.grid(row=3, column=0 )
+button2.grid(row=3, column=1 )
+button3.grid(row=3, column=2 )
+
+button4.grid(row=2, column=0 )
+button5.grid(row=2, column=1 )
+button6.grid(row=2, column=2 )
+
+button7.grid(row=1, column=0 )
+button8.grid(row=1, column=1 )
+button9.grid(row=1, column=2 )
+
+button0.grid(row=4, column=1 )
+
+button_plus.grid(row=1, column=3)
+button_minus.grid(row=2, column=3)
+button_dzielenie.grid(row=3, column=3)
+button_mnozenie.grid(row=4, column=3)
+
+button_clear.grid(row=4, column=0)
+button_przecinek.grid(row=4, column=2)
+button_rownasie.grid(row=5, column=0, columnspan=2)
+
+
+
+root.mainloop()
