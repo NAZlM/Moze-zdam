@@ -1,0 +1,288 @@
+import os
+import discord
+import requests
+import json
+import random
+from keep_alive import keep_alive
+
+
+from replit import db
+
+
+
+client = discord.Client()
+
+#&Hv
+
+
+
+#Globalne
+
+sad_words = ["jebać życie", "psycha siada", "zjebany", "zabić", "nie wytrzymam", "samobójstwo"]
+
+
+
+starter_encouragements = [
+  "Będzie dobrze",
+  "Nic się nie stało",
+  "Wszystko się jakoś ułoży",
+  "Wierzę w ciebie",
+  "Musisz w siebie uwierzyć"
+]
+
+
+
+gratulacje = [
+  "gratulacje",
+  "gratuluje",
+  "gratuluję",
+  "gratki",
+  "pog :hugging:"
+  ":clap:"
+]
+gratulacje1 = [
+  "Gratulacje",
+  "Gratuluje",
+  "Gratuluję",
+  "Gratki",
+  "Pog :hugging:",
+  ":clap: Zajebiście"
+]
+
+
+
+
+smiech_odpowiedzi = [
+  "xD",
+  "xDDD",
+  "Beka",
+  "Haha :sweat_smile:",
+  "XDDDD",
+  "Heh",
+  "Nie śmieszne :confused:",
+  "Pogu xD"
+]
+
+
+dzieki_odpowiedzi_emotka = [
+  ":ok_hand: ",
+  ":smiling_face_with_3_hearts: ",
+  ":smirk: "
+]
+
+dzieki_odpowiedzi = [
+  "No problemo",
+  "Nie ma sprawy",
+  "",
+]
+
+
+
+przywitania = [
+  "cześć",
+  "czesc",
+  "siema",
+  "elo",
+  "witajcie",
+  "dzien dobry",
+  "dzień dobry"
+]
+
+przywitania_odpowiedzi = [
+  "No siema ",
+  "No hey ",
+  "Elo ",
+  "Sieema :wave: ",
+  ":smiling_face_with_3_hearts: :wave: "
+]
+
+pierwszy = [
+  "pierwszy",
+  "pierwsza",
+  "pierwszy!",
+  "pierwsza!"
+]
+
+pozegnania = [
+  "branoc",
+  "dobranoc"
+]
+
+pozegnania_odpowiedzi = [
+  "Branoc! :open_hands: ",
+  "Dobranoc :sleeping: "
+]
+
+
+
+
+
+
+
+if "responding" not in db.keys():
+  db["responding"] = True
+
+
+
+
+#Definicje
+
+def get_quote():
+  response = requests.get("https://zenquotes.io/api/random")
+  json_data = json.loads(response.text)
+  quote = json_data[0]["q"] + " -" + json_data[0]["a"]
+  return(quote)
+
+def update_encouragements(encouraging_message):
+  if "encouragements" in db.keys():
+    encouragements = db["encouragements"]
+    encouragements.append(encouraging_message)
+    db["encouragements"] = encouragements
+  else:
+    db["encouragements"] = [encouraging_message]
+
+def delete_encouragment(index):
+  encouragements = db["encouragements"]
+  if len(encouragements) > index:
+    del encouragements[index]
+    db["encouragements"] = encouragements
+
+
+
+#Muzyka
+
+
+#Eventy
+
+@client.event
+async def on_ready():
+  print("We have logged in as {0.user}".format(client))
+
+
+@client.event
+async def on_message(message):
+  if message.author == client.user:
+    return
+
+  msg = message.content
+
+  
+  
+
+
+  if msg.lower().startswith("hv&"):
+    if "inspire" in msg.lower():
+      quote = get_quote()
+      await message.channel.send(quote)
+
+    if "help" in msg.lower():
+      await message.channel.send(
+        ":yellow_circle: **Hv& inspire** - `wysyła motywujący cytat`  :bulb:\n "  
+        "\n"
+        ":purple_circle: **Hv& new** - `dodaje pocieszającą odpowiedź`  :heart:\n"       
+        "\n"        
+        ":yellow_circle: **Hv& del** - `usuwa pocieszającą odpowiedź`  :broken_heart:\n "   "\n"                
+        ":purple_circle: **Hv& list** - `pokazuje listę pocieszających odpowiedzi`  :revolving_hearts:\n"  
+        "\n"
+        ":yellow_circle: **Hv& responding True** - `włącza odpowiedzi bota`  :partying_face:\n"     
+        "\n"
+        ":purple_circle: **Hv& responding False** - `wyłącza odpowiedzi bota`  :rolling_eyes:\n"
+        "\n"
+        ":yellow_circle: **Hv& sad words** - `wyświetla słowa aktywujące odpowiedzi bota`  :cupid:\n"
+        )
+
+
+
+    
+
+
+    if db["responding"]:
+      options = starter_encouragements
+      if "encouragements" in db.keys():
+        options = options + list(db["encouragements"])
+
+
+    if "new" in msg.lower():
+      encouraging_message = msg.split("Hv& new ",1)[1]
+      update_encouragements(encouraging_message)
+      await message.channel.send("New encouraging message added.")
+
+    if "del" in msg.lower():
+      encouragements = []
+      if "encouragements" in db.keys():
+        index = int(msg.split("Hv& del ",1)[1])
+        delete_encouragment(index)
+        encouragements = db["encouragements"]
+      await message.channel.send(encouragements)
+
+    if "sad words" in msg.lower():
+      await message.channel.send(sad_words)
+
+
+
+    if "list" in msg.lower():
+      encouragements = []
+      if "encouragements" in db.keys():
+        encouragements = db["encouragements"] 
+      await message.channel.send(encouragements)
+
+    if "inspire" in msg.lower():
+      value = msg.split("Hv& responding ",1)[1]
+
+      if value.lower() == "true":
+        db["responding"] = True
+        await message.channel.send("Responding is on.")
+      if value.lower() == "false":
+        db["responding"] = False
+        await message.channel.send("Responding is off.")
+      else:
+        return
+    else:
+      return
+
+
+
+  if db["responding"]:
+
+
+
+    if msg.lower().startswith("próba"):
+      await message.channel.send("We have logged in as {0.user}".format(message.author.mention))
+
+
+
+    options = starter_encouragements
+    if any(word in msg.lower() for word in sad_words):
+      await message.channel.send(random.choice(options))
+
+    if "dzięki haven".lower() in msg.lower():
+      await message.channel.send((random.choice(dzieki_odpowiedzi_emotka)) + (random.choice(dzieki_odpowiedzi)))
+
+    if "dzieki haven".lower() in msg.lower():
+      await message.channel.send((random.choice(dzieki_odpowiedzi_emotka)) + (random.choice(dzieki_odpowiedzi)))
+
+    
+
+  
+    xd = "xddddd"
+    if xd.lower() in msg.lower():
+      await message.channel.send(random.choice(smiech_odpowiedzi))
+
+
+  
+    if any(word in msg.lower() for word in gratulacje):
+      await message.channel.send(random.choice(gratulacje1))
+
+
+    if msg.lower() in przywitania:
+      await message.channel.send(random.choice(przywitania_odpowiedzi) + ("{}".format(message.author.mention)))
+
+    if msg.lower() in pierwszy:
+      await message.channel.send("Druga!")
+
+    if any(word in msg.lower() for word in pozegnania):
+      await message.channel.send(random.choice(pozegnania_odpowiedzi) + ("{}".format(message.author.mention)))
+
+
+keep_alive()
+client.run(os.environ['token'])
